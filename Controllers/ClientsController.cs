@@ -24,14 +24,13 @@ namespace Lab4v2.Controllers
         public async Task<IActionResult> Index(int id = 0)
         {
 
-            //A2
+            //Aassignment 2
             NewsBoardViewModel newsBoardViewModel = new NewsBoardViewModel();
             newsBoardViewModel.Clients = await _context.Clients.ToListAsync();
             if (id != 0)
             {
                 newsBoardViewModel.NewsBoards = await _context.NewsBoards.ToListAsync();
 
-             
                 var newsboardId = await _context.Subscriptions
                 .Where(i => i.ClientId == id)
                 .Select(i => i.NewsBoardId)

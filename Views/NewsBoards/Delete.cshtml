@@ -6,6 +6,12 @@
 
 <h1>Delete</h1>
 
+@if (ViewBag.newsCount != 0)
+{
+    <p style="color: Red;">Cannot delete while associated with news</p>
+}
+
+else{
 <h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>NewsBoard</h4>
@@ -31,3 +37,4 @@
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
+}

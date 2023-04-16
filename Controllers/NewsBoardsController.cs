@@ -150,6 +150,10 @@ namespace Lab4v2.Controllers
                 return NotFound();
             }
 
+            var newsList = _context.News.Where(x => x.NewsBoardID.Equals(id)).Count();
+
+            ViewBag.newsCount = newsList;
+
             return View(newsBoard);
         }
 
