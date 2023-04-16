@@ -6,6 +6,5 @@
         public Client Client { get; set; }
         public string NewsBoardId { get; set; }
         public NewsBoard NewsBoard { get; set; }
-
     }
 }

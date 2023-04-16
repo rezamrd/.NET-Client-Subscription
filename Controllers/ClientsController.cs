@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Lab4v2.Data;
 using Lab4v2.Models;
+using Lab4v2.Models.ViewModels;
 
 namespace Lab4v2.Controllers
 {
@@ -20,9 +21,30 @@ namespace Lab4v2.Controllers
         }
 
         // GET: Clients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int id = 0)
         {
-              return View(await _context.Clients.ToListAsync());
+
+            //A2
+            NewsBoardViewModel newsBoardViewModel = new NewsBoardViewModel();
+            newsBoardViewModel.Clients = await _context.Clients.ToListAsync();
+            if (id != 0)
+            {
+                newsBoardViewModel.NewsBoards = await _context.NewsBoards.ToListAsync();
+
+             
+                var newsboardId = await _context.Subscriptions
+                .Where(i => i.ClientId == id)
+                .Select(i => i.NewsBoardId)
+                .ToListAsync();
+
+                newsBoardViewModel.Subscriptions = await _context.Subscriptions
+                    .Where(c => newsboardId.Contains(c.NewsBoardId))
+                    .Distinct()
+                    .ToListAsync();
+            }
+
+            return View(newsBoardViewModel);
+   
         }
 
         // GET: Clients/Details/5
@@ -157,5 +179,57 @@ namespace Lab4v2.Controllers
         {
           return _context.Clients.Any(e => e.Id == id);
         }
+
+
+        public async Task<IActionResult> EditSubscriptions(int id = 0)
+        {
+
+            if (id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                NewsBoardViewModel newsBoardViewModel = new NewsBoardViewModel();
+
+                newsBoardViewModel.Subscriptions = await _context.Subscriptions
+                                    .Where(c => c.ClientId == id)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+                newsBoardViewModel.Clients = await _context.Clients
+                                    .Where(s => s.Id == id)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+                newsBoardViewModel.NewsBoards = await _context.NewsBoards
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+                return View(newsBoardViewModel);
+            }
+        }
+        
+
+        public async Task<IActionResult> RemoveSubscriptions(int ClientId, string NewsBoardId)
+        {
+            var removeRow = new Subscription { ClientId = ClientId, NewsBoardId = NewsBoardId };
+
+            _context.Subscriptions.Remove(removeRow);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> AddSubscriptions(int ClientId, string NewsBoardId)
+        {
+            var addRow = new Subscription { ClientId = ClientId, NewsBoardId = NewsBoardId };
+
+            _context.Subscriptions.Add(addRow);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        
     }
 }

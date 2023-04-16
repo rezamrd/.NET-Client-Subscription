@@ -39,7 +39,7 @@ namespace Lab4v2.Controllers
                 newsBoardViewModel.Clients = await _context.Clients
                     .Where(c => clientIds.Contains(c.Id))
                     .ToListAsync();
-
+                
             }
               return View(newsBoardViewModel);
         }

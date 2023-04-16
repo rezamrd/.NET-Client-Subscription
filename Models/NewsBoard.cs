@@ -23,5 +23,7 @@ namespace Lab4v2.Models
 
         public ICollection<Subscription> Subscriptions { get; set; }
 
+        public List<News> News { get; set; }
+
     }
 }

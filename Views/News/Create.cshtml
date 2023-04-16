@@ -1,0 +1,34 @@
+﻿@model Lab4v2.Models.News
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>News</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+       
+           <form asp-controller="News" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="btn btn-sm float-left">
+                <label asp-for="imageFile" class="control-label"></label>
+                <input asp-for="imageFile" name="imageFile" type="file" accept="image/*"  />
+                <input  name="NewsBoardID" hidden value="@ViewBag.NewsBoardID"/>
+                <span asp-validation-for="imageFile" class="text-danger"></span>
+
+            </div>
+       
+        <div class="form-group">
+            <button type="submit" class="btn btn-success"  >upload</button>
+        </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-route-id="@ViewBag.NewsBoardID">Back to List</a>
+</div>
+

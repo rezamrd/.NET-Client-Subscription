@@ -1,16 +1,7 @@
+using Azure.Storage.Blobs;
 using Lab4v2.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-
 
 namespace Lab4v2
 {
@@ -24,9 +15,11 @@ namespace Lab4v2
             builder.Services.AddControllersWithViews();
             var connection = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<NewsDbContext>(options => options.UseSqlServer(connection));
+            var blobConnection = builder.Configuration.GetConnectionString("AzureBlobStorage");
+            builder.Services.AddSingleton(new BlobServiceClient(blobConnection));
+
             builder.Services.AddSession();
             var app = builder.Build();
-
 
             using (var scope = app.Services.CreateScope())
             {

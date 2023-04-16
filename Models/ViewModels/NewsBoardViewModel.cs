@@ -1,4 +1,8 @@
-﻿namespace Lab4v2.Models.ViewModels
+﻿using System.Collections.Generic;
+
+
+namespace Lab4v2.Models.ViewModels
+
 {
     public class NewsBoardViewModel
     {

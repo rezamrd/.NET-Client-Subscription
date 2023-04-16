@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Lab4v2.Models.Client>
+﻿@model Lab4v2.Models.ViewModels.NewsBoardViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,19 +13,21 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+               Last Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+               First Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
+               Birth Date
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+  @if (Model.Clients != null)
+{
+ @foreach (var item in Model.Clients)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
@@ -37,11 +39,38 @@
                 @Html.DisplayFor(modelItem => item.BirthDate)
             </td>
             <td>
+                <a asp-action="Index" asp-route-id="@item.Id">Select</a> | <!--A2-->
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="EditSubscriptions" asp-route-id="@item.Id">Edit Subscription</a> | <!--A2-->
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
+    }
 }
     </tbody>
 </table>
+
+<!--A2-->
+
+@if (Model.Subscriptions != null)
+{
+    <table class="table">
+        <tr>
+            @if (Model.Subscriptions.Count() > 0)
+            {
+                <th>Name</th>
+            }
+            else
+            {
+                <th>No subscriptions record exist</th>
+            }
+        </tr>
+        @foreach (var item in Model.Subscriptions)
+        {
+            <tr>
+                <td>@item.NewsBoard.Title</td>
+            </tr>
+        }
+    </table>
+}

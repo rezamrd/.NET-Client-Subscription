@@ -1,0 +1,51 @@
+﻿@model Lab4v2.Models.ViewModels.NewsBoardViewModel
+@{
+        ViewData["Title"] = "Edit Subscription";
+
+}
+
+<h1>Edit</h1>
+<h4>Client</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <td>
+                @Model.Clients.FirstOrDefault().FullName
+            </td>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model.Clients)
+        {
+            @foreach (var c in Model.NewsBoards)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(NewsBoards => c.Title)
+                    </td>
+                    <td>
+                        @if (Model.Subscriptions.Any(i => i.NewsBoardId == c.Id) == false)
+                        {
+                         
+                            <a asp-action="AddSubscriptions" asp-route-ClientId="@s.Id"
+                               asp-route-NewsBoardId="@c.Id">Register</a>
+                        }
+                        else
+                        {
+                            <a asp-action="RemoveSubscriptions" asp-route-ClientId="@s.Id"
+                               asp-route-NewsBoardId="@c.Id">Unregister</a>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
